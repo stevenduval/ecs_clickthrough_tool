@@ -24,7 +24,7 @@ const showLinks = () => {
     const getLinks = getBody.match(/(href\s*=\s*["])([^]*?)(?:["][^]*?)/g);
 	let links = getLinks.map(link => (/""/g.test(link)) ? link.replace(/href\=/g,"").replace(/""/g,"blank href tag") : link.replace(/href\=/g,"").replace(/"/g,""));
     
-    const clickthrough = links.map((link, index) => (!link.includes('google') && !link.includes('unsub')) ? `$clickthrough(${billcode.value}_Link_${index})$`: link);
+    const clickthrough = links.map((link, index) => (!link.includes('google') && !link.includes('unsub')) ? `$clickthrough(${billcode.value.replace('-','_')}_Link_${index})$`: link);
     
     
     //links = links.filter(link => !link.includes('google') && !link.includes('unsub'));
@@ -52,7 +52,7 @@ const showLinks = () => {
     links.forEach((link,index) => {
         document.querySelectorAll('.link-area > .link > .link-container > .currentLink > input')[index].value = link;
         document.querySelectorAll('.link-area > .link > .link-container > .newLink > input')[index].value = clickthrough[index];
-        linkTable.push(`${clickthrough[index]},${link}`);
+        linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`);
     });
 }
 
@@ -79,7 +79,7 @@ const saveOutput = () => {
     const text = getHeader+replacedLinks.replace(/\n/g, "\r\n"); // To retain the Line breaks.
     const blob = new Blob([text], { type: "text/plain"});
     const anchor = document.createElement("a");
-    anchor.download = `ecs_team_tool_output_${date}.html`;
+    anchor.download = `index_${billcode}_${date}.html`;
     anchor.href = window.URL.createObjectURL(blob);
     anchor.target ="_blank";
     anchor.style.display = "none"; // just to be safe!
@@ -90,7 +90,7 @@ const saveOutput = () => {
     const text2 = linkTable.join('\n');
     const blob2 = new Blob([text2], { type: "text/plain"});
     const anchor2 = document.createElement("a");
-    anchor2.download = `ecs_team_tool_output_link_table${date}.csv`;
+    anchor2.download = `$link_table_${billcode}_${date}.csv`;
     anchor2.href = window.URL.createObjectURL(blob2);
     anchor2.target ="_blank";
     anchor2.style.display = "none"; // just to be safe!
