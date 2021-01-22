@@ -53,7 +53,7 @@ const showLinks = () => {
         document.querySelectorAll('.link-area > .link > .link-container > .currentLink > input')[index].value = link;
         document.querySelectorAll('.link-area > .link > .link-container > .newLink > input')[index].value = clickthrough[index];
         
-       if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub') && !link.toLowerCase().includes('webversion')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
+       if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
     });
 }
 
