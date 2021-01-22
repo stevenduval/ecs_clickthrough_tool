@@ -90,7 +90,7 @@ const saveOutput = () => {
     const text2 = linkTable.join('\n');
     const blob2 = new Blob([text2], { type: "text/plain"});
     const anchor2 = document.createElement("a");
-    anchor2.download = `$link_table_${billcode.value}_${date}.csv`;
+    anchor2.download = `link_table_${billcode.value}_${date}.csv`;
     anchor2.href = window.URL.createObjectURL(blob2);
     anchor2.target ="_blank";
     anchor2.style.display = "none"; // just to be safe!
