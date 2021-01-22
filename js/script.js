@@ -52,7 +52,8 @@ const showLinks = () => {
     links.forEach((link,index) => {
         document.querySelectorAll('.link-area > .link > .link-container > .currentLink > input')[index].value = link;
         document.querySelectorAll('.link-area > .link > .link-container > .newLink > input')[index].value = clickthrough[index];
-        linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`);
+        
+       if (!link.includes('google') && !link.includes('unsub')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
     });
 }
 
