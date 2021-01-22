@@ -24,7 +24,7 @@ const showLinks = () => {
     const getLinks = getBody.match(/(href\s*=\s*["])([^]*?)(?:["][^]*?)/g);
 	let links = getLinks.map(link => (/""/g.test(link)) ? link.replace(/href\=/g,"").replace(/""/g,"blank href tag") : link.replace(/href\=/g,"").replace(/"/g,""));
     
-    const clickthrough = links.map((link, index) => (!link.includes('google') && !link.includes('unsub')) ? `$clickthrough(${billcode.value.replace('-','_')}_Link_${index})$`: link);
+    const clickthrough = links.map((link, index) => (!link.includes('google') && !link.includes('unsub') && !link.includes('webversion')) ? `$clickthrough(${billcode.value.replace('-','_')}_Link_${index})$`: link);
     
     
     //links = links.filter(link => !link.includes('google') && !link.includes('unsub'));
@@ -53,7 +53,7 @@ const showLinks = () => {
         document.querySelectorAll('.link-area > .link > .link-container > .currentLink > input')[index].value = link;
         document.querySelectorAll('.link-area > .link > .link-container > .newLink > input')[index].value = clickthrough[index];
         
-       if (!link.includes('google') && !link.includes('unsub')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
+       if (!link.includes('google') && !link.includes('unsub') && !link.includes('webversion')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
     });
 }
 
