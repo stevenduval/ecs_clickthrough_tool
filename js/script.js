@@ -5,7 +5,7 @@ const saveBtn =  document.querySelector('.save');
 const reloadBtn =  document.querySelector('.reload');
 const input = document.querySelector('#input');
 const billcode = document.querySelector('#billcode');
-const linkTable = [];
+const linkTable = ['LINK_NAME,LINK_URL'];
 
 
 // run when more than 1 character is typed in the box
@@ -15,7 +15,9 @@ const characterCount = () => {
     characterCountSpan.innerText = (inputLength > 0) ? `Character Count : ${inputLength}` : '';
 }
 
-const showLinks = () => {
+const findLinks = () => {
+    if (!(/\d+[-]\d+/g.test(billcode.value))) { alert('Invalid JOB# entered, please enter valid JOB#'); return;}
+    if (input.querySelector('textarea').value.length <= 0 ) {alert('Input area is empty, please insert HTML into input area'); return;}
     // clear link area and count if button is clicked again
     document.querySelector('.link-count').innerHTML = '';
     document.querySelector('.link-area').innerHTML = '';
@@ -24,9 +26,17 @@ const showLinks = () => {
     const getLinks = getBody.match(/(href\s*=\s*["])([^]*?)(?:["][^]*?)/g);
 	let links = getLinks.map(link => (/""/g.test(link)) ? link.replace(/href\=/g,"").replace(/""/g,"blank href tag") : link.replace(/href\=/g,"").replace(/"/g,""));
     
-    const clickthrough = links.map((link, index) => (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub') && !link.toLowerCase().includes('webversion')) ? `$clickthrough(${billcode.value.replace('-','_')}_Link_${index})$`: link);
-    
-    
+    const clickthrough = links.map((link, index) => {  
+        if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub') && !link.toLowerCase().includes('webversion')) {
+            return `$clickthrough(${billcode.value.replace('-','_')}_Link_${index})$`
+        } 
+        else if (link.toLowerCase().includes('webversion')){
+            return `$formlink(campaignname(),EMAIL_ADDRESS_,DMDUSAGE,DMDUID,DMDSID,KEYCODE,KEYCODE2,KEYCODE3,KEYCODE4,INS1,INS2,INS3,INS4,INS5,INS6,INS7,INS8,INS9,INS10,INS11,INS12,INS13,INS14,INS15,DMDSEGMENT)$`} 
+        else {
+           return link
+        }
+    });
+                                   
     //links = links.filter(link => !link.includes('google') && !link.includes('unsub'));
     
     
@@ -53,7 +63,7 @@ const showLinks = () => {
         document.querySelectorAll('.link-area > .link > .link-container > .currentLink > input')[index].value = link;
         document.querySelectorAll('.link-area > .link > .link-container > .newLink > input')[index].value = clickthrough[index];
         
-       if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
+       if(link.toLowerCase().includes('webversion')) { linkTable.push(`WebVersion,"$formlink(campaignname(),EMAIL_ADDRESS_,DMDUSAGE,DMDUID,DMDSID,KEYCODE,KEYCODE2,KEYCODE3,KEYCODE4,INS1,INS2,INS3,INS4,INS5,INS6,INS7,INS8,INS9,INS10,INS11,INS12,INS13,INS14,INS15,DMDSEGMENT)$"`)} else if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
     });
 }
 
@@ -63,6 +73,7 @@ const saveOutput = () => {
     const getOldLinks = document.querySelectorAll('.currentLink > input');
     const getNewLinks = document.querySelectorAll('.newLink > input');
     const getNewLinksValues = [];
+    if (getOldLinks.length <= 0) { alert(`Please click "FIND LINKS" first before saving`); return;}
     const getHeader = input.querySelector('textarea').value.match(/<[^]*(?=<body)/g).toString();
     const getBody = input.querySelector('textarea').value.match(/(<body[^]*)/g).toString();
     const date = new Date().toLocaleString('en-ca').split(",")[0].replace(/-/g,"_");
@@ -102,7 +113,7 @@ const saveOutput = () => {
 
 
 // event listeners
-findlinksBtn.addEventListener('click', showLinks);
+findlinksBtn.addEventListener('click', findLinks);
 saveBtn.addEventListener('click', saveOutput);
 reloadBtn.addEventListener('click', () => location.reload(true));
 input.querySelector('textarea').addEventListener('keyup', characterCount);
