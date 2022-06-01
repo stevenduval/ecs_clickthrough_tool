@@ -28,7 +28,7 @@ const findLinks = () => {
     
     const clickthrough = links.map((link, index) => {  
         if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub') && !link.toLowerCase().includes('webversion') && !link.toLowerCase().startsWith('#')) {
-            return `$clickthrough(${billcode.value.replace('-','_')}_Link_${index})$`
+            return `\${clickthrough('${billcode.value.replace('-','_')}_Link_${index})}`
         } 
 //        else if (link.toLowerCase().includes('webversion')){
 //            return `$formlink(campaignname(),EMAIL_ADDRESS_,DMDUSAGE,DMDUID,DMDSID,KEYCODE,KEYCODE2,KEYCODE3,KEYCODE4,INS1,INS2,INS3,INS4,INS5,INS6,INS7,INS8,INS9,INS10,INS11,INS12,INS13,INS14,INS15,DMDSEGMENT)$`} 
@@ -63,7 +63,7 @@ const findLinks = () => {
         document.querySelectorAll('.link-area > .link > .link-container > .currentLink > input')[index].value = link;
         document.querySelectorAll('.link-area > .link > .link-container > .newLink > input')[index].value = clickthrough[index];
         
-       if(link.toLowerCase().includes('webversion')) { linkTable.push(`WebVersion,"$formlink(campaignname(),EMAIL_ADDRESS_,DMDUSAGE,DMDUID,DMDSID,KEYCODE,KEYCODE2,KEYCODE3,KEYCODE4,INS1,INS2,INS3,INS4,INS5,INS6,INS7,INS8,INS9,INS10,INS11,INS12,INS13,INS14,INS15,DMDSEGMENT)$"`)} else if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub') && !link.toLowerCase().startsWith('#')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
+       if(link.toLowerCase().includes('webversion')) { linkTable.push(`WebVersion,"/$/{form(campaign.name,{},'EMAIL_ADDRESS_','DMDUSAGE','DMDSID','DMDUID','KEYCODE','KEYCODE2','KEYCODE3','KEYCODE4','DMDSEGMENT','INS1','INS2','INS3','INS4','INS5','INS6','INS7','INS8','INS9','INS10','INS11','INS12','INS13','INS14','INS15')}"`)} else if (!link.toLowerCase().includes('google') && !link.toLowerCase().includes('unsub') && !link.toLowerCase().startsWith('#')) { linkTable.push(`${billcode.value.replace('-','_')}_Link_${index},${link}`)};
     });
 }
 
